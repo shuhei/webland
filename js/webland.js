@@ -165,12 +165,19 @@ LAND.Japan = function (container) {
     return false;
   }
 
+  function onResize(event) {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  }
+
   function zoom(delta) {
     distanceTarget -= delta;
     distanceTarget = distanceTarget > 3000 ? 3000 : distanceTarget;
     distanceTarget = distanceTarget < 30 ? 30 : distanceTarget;
   }
 
+  window.addEventListener('resize', onResize);
   container.addEventListener('mousewheel', onMouseWheel, false);
   container.addEventListener('mousedown', onMouseDown, false);
 
