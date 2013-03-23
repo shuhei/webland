@@ -12,16 +12,16 @@
   </head>
   <body>
     <script src="js/three.js"></script>
-    <script src="js/THREEx.GeometryUtils.js"></script>
     <script src="js/webland.js"></script>
     <script>
+      var japan = LAND.Japan(document.body);
+
       var xhr = new XMLHttpRequest();
       xhr.open('GET', './prices.json', true);
       xhr.onreadystatechange = function (e) {
         if (xhr.readyState === 4 && xhr.status === 200) {
           var data = JSON.parse(xhr.responseText);
-          addData(data);
-          window.addEventListener('mousewheel', onMouseWheel);
+          japan.addData(data);
         }
       };
       xhr.send(null);
