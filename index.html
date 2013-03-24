@@ -36,20 +36,27 @@
   <body>
     <h1>Land Prices in Japan</h1>
     <footer>Created by Shuhei Kagawa. Excessively inspired by <a href="http://www.chromeexperiments.com/globe">WebGL Globe</a>. Data acquired from <a href="http://www.land.mlit.go.jp/webland/">MLIT</a>. Get the <a href="https://github.com/shuhei/webland">code</a>.</footer>
+
     <script src="js/three.js"></script>
     <script src="js/webland.js"></script>
-    <script>
-      var japan = LAND.Japan(document.body);
+    <script src="js/Detector.js"></script>
 
-      var xhr = new XMLHttpRequest();
-      xhr.open('GET', './prices.json', true);
-      xhr.onreadystatechange = function (e) {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-          var data = JSON.parse(xhr.responseText);
-          japan.addData(data);
-        }
-      };
-      xhr.send(null);
+    <script>
+      if (Detector.webgl) {
+        var japan = LAND.Japan(document.body);
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', './prices.json', true);
+        xhr.onreadystatechange = function (e) {
+          if (xhr.readyState === 4 && xhr.status === 200) {
+            var data = JSON.parse(xhr.responseText);
+            japan.addData(data);
+          }
+        };
+        xhr.send(null);
+      } else {
+        Detector.addGetWebGLMessage();
+      }
     </script>
   </body>
 </html>
