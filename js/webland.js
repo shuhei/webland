@@ -13,9 +13,6 @@ LAND.Japan = function (container) {
   var distance = 1000;
   var distanceTarget = 1000;
 
-  init();
-  animate();
-
   function init() {
     // Create camera
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000);
@@ -27,7 +24,8 @@ LAND.Japan = function (container) {
     // Create scene
     scene = new THREE.Scene();
 
-    // Create point mesh
+    // Create a mesh to contain all data points.
+    // One merged large mesh performs better than lots of tiny meshes.
     geometry = new THREE.CubeGeometry(0.75, 0.75, 1, 1, 1, 1, null, false,
       { px: true, nx: true, py: true, ny: true, pz: false, nz: true});
     for (var i = 0; i < geometry.vertices.length; i++) {
@@ -36,9 +34,8 @@ LAND.Japan = function (container) {
     }
     mesh = new THREE.Mesh(geometry);
 
-    // Create renderer.
-    // renderer = new THREE.CanvasRenderer();
-    // renderer.setSize(window.innerWidth, window.innerHeight);
+    // Create WebGL renderer.
+    // Canvas renderer is too slow to render 30k data points.
     renderer = new THREE.WebGLRenderer();
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setClearColorHex(0x000000, 1);
@@ -47,9 +44,11 @@ LAND.Japan = function (container) {
   }
 
   function animate() {
-    // note: three.js includes requestAnimationFrame shim
     requestAnimationFrame(animate);
+    render();
+  }
 
+  function render() {
     camera.position.x += (target.x - camera.position.x) * 0.1;
     camera.position.y += (target.y - camera.position.y) * 0.1;
 
@@ -57,33 +56,31 @@ LAND.Japan = function (container) {
     camera.position.z = distance;
 
     if (points) {
-      // points.rotation.x += 0.005;
-      // points.rotation.y += 0.01;
-
-      // points.rotation.x = -Math.PI / 4;
-      // points.rotation.y = 0;
+      // TODO Add side view.
+      // points.rotation.x = - Math.PI / 2;
+      // points.rotation.z = - Math.PI / 4;
+      // points.position.z = 100;
     }
 
     renderer.render(scene, camera);
   }
 
   function addData(data) {
-    var lat, lng, price, i, j, color;
+    var lat, lng, price, i, j, color, subgeo, max;
     var latCenter = 37;
     var lngCenter = 140;
 
-    console.log(data.length);
+    console.log(data.length / 3, 'data points.');
 
-    var max = 0;
+    max = 0;
     for (i = 0; i < data.length; i += 3) {
       price = data[i + 2];
       if (price > max) max = price;
     }
     console.log("max", max);
 
-    var subgeo = new THREE.Geometry();
+    subgeo = new THREE.Geometry();
     for (i = 0; i < data.length; i += 3) {
-    // for (i = 0; i < 9000; i += 3) {
       lat = data[i];
       lng = data[i + 1];
       price = data[i + 2];
@@ -93,16 +90,15 @@ LAND.Japan = function (container) {
       mesh.position.z = 0;
 
       mesh.scale.z = price / 10000;
-      mesh.scale.x = 1;
-      mesh.scale.y = 1;
+      // mesh.scale.z = Math.log(price);
 
       mesh.updateMatrix();
 
+      // Set color for price.
       var c = new THREE.Color();
       var hue = price / 1000000;
       if (hue > 1.0) hue = 1.0;
       c.setHSL(0.6 - hue / 0.6, 1.0, 0.8);
-      // c.setHex(0xff0000);
       for (j = 0; j < mesh.geometry.faces.length; j++) {
         mesh.geometry.faces[j].color = c;
       }
@@ -117,6 +113,10 @@ LAND.Japan = function (container) {
     }));
     scene.add(points);
   }
+
+  //
+  // Event handlers
+  //
 
   function onMouseDown(event) {
     event.preventDefault();
@@ -155,8 +155,6 @@ LAND.Japan = function (container) {
 
     target.x = targetOnDown.x + (mouse.x - mouseOnDown.x) * zoomDamp;
     target.y = targetOnDown.y + (mouse.y - mouseOnDown.y) * zoomDamp;
-
-    console.log(target);
   }
 
   function onMouseWheel(event) {
@@ -176,6 +174,9 @@ LAND.Japan = function (container) {
     distanceTarget = distanceTarget > 3000 ? 3000 : distanceTarget;
     distanceTarget = distanceTarget < 30 ? 30 : distanceTarget;
   }
+
+  init();
+  animate();
 
   window.addEventListener('resize', onResize);
   container.addEventListener('mousewheel', onMouseWheel, false);
