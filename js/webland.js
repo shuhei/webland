@@ -40,6 +40,7 @@ LAND.Japan = function (container) {
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setClearColorHex(0x000000, 1);
 
+    renderer.domElement.style.position = 'absolute';
     document.body.appendChild(renderer.domElement);
   }
 
@@ -158,8 +159,10 @@ LAND.Japan = function (container) {
   }
 
   function onMouseWheel(event) {
+    // mousewheel -> wheelDeltaY, wheel -> deltaY
+    var deltaY = event.wheelDeltaY || event.deltaY || 0;
     event.preventDefault();
-    zoom(event.wheelDeltaY * 0.3);
+    zoom(deltaY * 0.3);
     return false;
   }
 
@@ -179,8 +182,9 @@ LAND.Japan = function (container) {
   animate();
 
   window.addEventListener('resize', onResize);
-  container.addEventListener('mousewheel', onMouseWheel, false);
   container.addEventListener('mousedown', onMouseDown, false);
+  container.addEventListener('mousewheel', onMouseWheel, false); // For Chrome
+  container.addEventListener('wheel', onMouseWheel, false); // For Firefox
 
   this.addData = addData;
   return this;
