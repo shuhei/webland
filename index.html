@@ -13,7 +13,7 @@
         font-family: Helvetica, Arial, sans-serif;
       }
       h1 {
-        position: fixed;
+        position: absolute;
         top: 20px;
         left: 30px;
         font-size: 20px;
@@ -22,7 +22,7 @@
         margin: 0;
       }
       footer {
-        position: fixed;
+        position: absolute;
         text-align: right;
         right: 30px;
         bottom: 20px;
@@ -34,6 +34,7 @@
     </style>
   </head>
   <body>
+    <div id="container"></div>
     <h1>Land Prices in Japan</h1>
     <footer>Created by Shuhei Kagawa. Excessively inspired by <a href="http://www.chromeexperiments.com/globe">WebGL Globe</a>. Data acquired from <a href="http://www.land.mlit.go.jp/webland/">MLIT</a>. Get the <a href="https://github.com/shuhei/webland">code</a>.</footer>
 
@@ -43,7 +44,8 @@
 
     <script>
       if (Detector.webgl) {
-        var japan = LAND.Japan(document.body);
+        var container = document.getElementById('container');
+        var japan = LAND.Japan(container);
 
         var xhr = new XMLHttpRequest();
         xhr.open('GET', './prices.json', true);

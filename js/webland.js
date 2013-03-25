@@ -41,7 +41,7 @@ LAND.Japan = function (container) {
     renderer.setClearColorHex(0x000000, 1);
 
     renderer.domElement.style.position = 'absolute';
-    document.body.appendChild(renderer.domElement);
+    container.appendChild(renderer.domElement);
   }
 
   function animate() {
