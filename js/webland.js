@@ -13,6 +13,8 @@ LAND.Japan = function (container) {
   var distance = 1000;
   var distanceTarget = 1000;
 
+  var isBirdView = true;
+
   function init() {
     // Create camera
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000);
@@ -57,10 +59,15 @@ LAND.Japan = function (container) {
     camera.position.z = distance;
 
     if (points) {
-      // TODO Add side view.
-      // points.rotation.x = - Math.PI / 2;
-      // points.rotation.z = - Math.PI / 4;
-      // points.position.z = 100;
+      if (isBirdView) {
+        points.rotation.x = 0;
+        points.rotation.z = 0;
+        points.position.z = 0;
+      } else {
+        points.rotation.x = - Math.PI / 2;
+        points.rotation.z = - Math.PI / 4;
+        points.position.z = 100;
+      }
     }
 
     renderer.render(scene, camera);
@@ -172,6 +179,12 @@ LAND.Japan = function (container) {
     renderer.setSize(window.innerWidth, window.innerHeight);
   }
 
+  function onKeyDown(event) {
+    if (event.keyCode === 32) {
+      isBirdView = !isBirdView;
+    }
+  }
+
   function zoom(delta) {
     distanceTarget -= delta;
     distanceTarget = distanceTarget > 3000 ? 3000 : distanceTarget;
@@ -182,6 +195,7 @@ LAND.Japan = function (container) {
   animate();
 
   window.addEventListener('resize', onResize);
+  window.addEventListener('keydown', onKeyDown, false);
   container.addEventListener('mousedown', onMouseDown, false);
   container.addEventListener('mousewheel', onMouseWheel, false); // For Chrome
   container.addEventListener('wheel', onMouseWheel, false); // For Firefox
