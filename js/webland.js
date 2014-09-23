@@ -15,6 +15,9 @@ LAND.Japan = function (container) {
 
   var isBirdView = true;
 
+  // For pinch gesture on touch devices.
+  var previousScale = null;
+
   function init() {
     // Create camera
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000);
@@ -185,6 +188,22 @@ LAND.Japan = function (container) {
     }
   }
 
+  function onGestureStart(event) {
+    previousScale = event.scale;
+  }
+
+  function onGestureChange(event) {
+    var scale = event.scale / previousScale;
+    zoom(0.1 * distanceTarget * (scale - 1) / scale);
+    previsousScale = event.scale;
+  }
+
+  function onGestureEnd(event) {
+    var scale = event.scale / previousScale;
+    zoom(0.1 * distanceTarget * (scale - 1) / scale);
+    previousScale = null;
+  }
+
   function zoom(delta) {
     distanceTarget -= delta;
     distanceTarget = distanceTarget > 3000 ? 3000 : distanceTarget;
@@ -199,6 +218,10 @@ LAND.Japan = function (container) {
   container.addEventListener('mousedown', onMouseDown, false);
   container.addEventListener('mousewheel', onMouseWheel, false); // For Chrome
   container.addEventListener('wheel', onMouseWheel, false); // For Firefox
+  // For iOS touch devices
+  container.addEventListener('gesturestart', onGestureStart, false);
+  container.addEventListener('gesturechange', onGestureChange, false);
+  container.addEventListener('gestureend', onGestureEnd, false);
 
   this.addData = addData;
   return this;
