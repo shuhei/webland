@@ -1,6 +1,6 @@
 # Land Prices in Japan
 
-![Land Prices in Japan](img/thumbnail.png)
+[![Land Prices in Japan](img/thumbnail.png)](http://shuheikagawa.com/webland)
 
 Excessively inspired by the Google Data Arts Team's [WebGL Globe](http://www.chromeexperiments.com/globe).
 
