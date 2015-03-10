@@ -1,0 +1,27 @@
+{
+  "name": "webland",
+  "version": "1.0.0",
+  "description": "Visualize land prices in Japan",
+  "main": "index.js",
+  "devDependencies": {
+    "gh-pagesify": "^0.2.5"
+  },
+  "scripts": {
+    "build": "rm -rf public && mkdir public && cp -r {index.html,img,js,prices.data} public/",
+    "deploy": "npm run build && gh-pagesify",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shuhei/webland.git"
+  },
+  "author": "Shuhei Kagawa <shuhei.kagawa@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shuhei/webland/issues"
+  },
+  "homepage": "https://github.com/shuhei/webland",
+  "gh-pages": {
+    "repository": "shuhei/webland"
+  }
+}
