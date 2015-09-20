@@ -4,10 +4,12 @@
   "description": "Visualize land prices in Japan",
   "main": "index.js",
   "devDependencies": {
+    "browserify": "^11.1.0",
     "gh-pagesify": "^0.2.5"
   },
   "scripts": {
-    "build": "rm -rf public && mkdir public && cp -r {index.html,img,js,prices.data} public/",
+    "build": "rm -rf public && mkdir -p public && npm run js && cp -r {index.html,lib,img,prices.data} public/",
+    "js": "mkdir -p public/js && browserify -t babelify js/index.js > public/js/index.js",
     "deploy": "npm run build && gh-pagesify",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -23,5 +25,8 @@
   "homepage": "https://github.com/shuhei/webland",
   "gh-pages": {
     "repository": "shuhei/webland"
+  },
+  "dependencies": {
+    "whatwg-fetch": "^0.9.0"
   }
 }

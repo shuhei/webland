@@ -1,6 +1,7 @@
-var LAND = LAND || {};
-
-LAND.Japan = function (container) {
+export function Webland(container) {
+  const loading = document.createElement('div');
+  loading.classList.add('loading');
+  loading.appendChild(document.createTextNode('Loading...'));
 
   var camera, scene, renderer;
   var geometry, material, mesh, points;
@@ -63,6 +64,9 @@ LAND.Japan = function (container) {
 
     renderer.domElement.style.position = 'absolute';
     container.appendChild(renderer.domElement);
+
+    // Loading.
+    container.appendChild(loading);
   }
 
   function animate() {
@@ -139,6 +143,9 @@ LAND.Japan = function (container) {
       morphTargets: false
     }));
     scene.add(points);
+
+    // Hide loading.
+    container.removeChild(loading);
   }
 
   //
@@ -268,5 +275,4 @@ LAND.Japan = function (container) {
   container.addEventListener('gestureend', onGestureEnd, false);
 
   this.addData = addData;
-  return this;
 };
