@@ -5,7 +5,7 @@
   "main": "index.js",
   "devDependencies": {
     "browserify": "^11.1.0",
-    "gh-pagesify": "^0.2.5"
+    "gh-pagesify": "^0.2.6"
   },
   "scripts": {
     "build": "rm -rf public && mkdir -p public && npm run js && cp -r {index.html,lib,img,prices.data} public/",
